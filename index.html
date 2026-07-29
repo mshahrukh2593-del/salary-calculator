@@ -500,6 +500,87 @@
     .checkbox-row { min-height: 39px; margin-bottom: 8px; padding: 8px 10px; border-radius: 11px; }
     @media (min-width: 600px) { .expense { grid-template-columns: minmax(0, 1fr) auto; } }
 
+  
+    /* Single-line expense metadata and controls */
+    .expense {
+      grid-template-columns: 1fr !important;
+    }
+
+    .expense-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .expense-meta-row .badges {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      min-width: 0;
+      margin: 0;
+      gap: 4px;
+    }
+
+    .date-badge {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 130px;
+    }
+
+    .icon-badge {
+      width: 25px;
+      min-width: 25px;
+      height: 25px;
+      min-height: 25px;
+      padding: 0;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .expense-meta-row .expense-actions {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 5px;
+    }
+
+    .expense-meta-row .small-btn {
+      width: 31px;
+      min-width: 31px;
+      min-height: 31px;
+      height: 31px;
+      border-radius: 9px;
+    }
+
+    .expense-meta-row .small-btn[data-action="pin"]::before,
+    .expense-meta-row .small-btn[data-action="edit"]::before,
+    .expense-meta-row .small-btn[data-action="delete"]::before {
+      font-size: 14px;
+    }
+
+    @media (max-width: 390px) {
+      .date-badge {
+        max-width: 104px;
+        font-size: 9px;
+      }
+
+      .icon-badge {
+        width: 23px;
+        min-width: 23px;
+        height: 23px;
+        min-height: 23px;
+      }
+
+      .expense-meta-row .small-btn {
+        width: 29px;
+        min-width: 29px;
+        min-height: 29px;
+        height: 29px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1010,23 +1091,27 @@
             <div class="expense-head">
               <div style="min-width:0">
                 <div class="expense-title">${escapeHtml(e.name)}</div>
-                <div class="badges">
-                  <span class="badge">${escapeHtml(formatDate(e.date))}</span>
-                  ${e.pinned ? '<span class="badge pin">📌 Pinned</span>' : ""}
-                  ${e.recurring ? '<span class="badge recurring">↻ Recurring</span>' : ""}
-                </div>
-              </div>
+                  </div>
               <div class="expense-amount">${formatMoney(e.amount)}</div>
             </div>
-            ${e.note ? `<div class="expense-note">${escapeHtml(e.note)}</div>` : ""}
-          </div>
 
-          <div class="expense-actions no-print">
-            <button class="small-btn btn soft-amber" data-action="pin" data-id="${escapeHtml(e.id)}" aria-label="${e.pinned ? "Unpin expense" : "Pin expense"}" title="${e.pinned ? "Unpin" : "Pin"}">
-              ${e.pinned ? "Unpin" : "Pin"}
-            </button>
-            <button class="small-btn btn soft-primary" data-action="edit" data-id="${escapeHtml(e.id)}" aria-label="Edit expense" title="Edit">Edit</button>
-            <button class="small-btn btn soft-danger" data-action="delete" data-id="${escapeHtml(e.id)}" aria-label="Delete expense" title="Delete">Delete</button>
+            <div class="expense-meta-row">
+              <div class="badges">
+                <span class="badge date-badge">${escapeHtml(formatDate(e.date))}</span>
+                ${e.pinned ? '<span class="badge pin icon-badge" aria-label="Pinned" title="Pinned">📌</span>' : ""}
+                ${e.recurring ? '<span class="badge recurring icon-badge" aria-label="Recurring" title="Recurring">↻</span>' : ""}
+              </div>
+
+              <div class="expense-actions no-print">
+                <button class="small-btn btn soft-amber" data-action="pin" data-id="${escapeHtml(e.id)}" aria-label="${e.pinned ? "Unpin expense" : "Pin expense"}" title="${e.pinned ? "Unpin" : "Pin"}">
+                  ${e.pinned ? "Unpin" : "Pin"}
+                </button>
+                <button class="small-btn btn soft-primary" data-action="edit" data-id="${escapeHtml(e.id)}" aria-label="Edit expense" title="Edit">Edit</button>
+                <button class="small-btn btn soft-danger" data-action="delete" data-id="${escapeHtml(e.id)}" aria-label="Delete expense" title="Delete">Delete</button>
+              </div>
+            </div>
+
+            ${e.note ? `<div class="expense-note">${escapeHtml(e.note)}</div>` : ""}
           </div>
         `;
         expenseList.appendChild(li);
