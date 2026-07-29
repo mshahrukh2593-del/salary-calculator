@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Makes the page display correctly on an iPhone -->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <!-- Gives the web app a name on iPhone -->
+    <meta name="apple-mobile-web-app-title" content="My Budget">
+
+    <!-- Opens the saved website more like an app -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Controls the iPhone status bar appearance -->
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <!-- Sets the browser theme colour -->
+    <meta name="theme-color" content="#f4f6f8">
+
+    <title>My Budget</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f4f6f8;
+            color: #1f2937;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 620px;
+            margin: 0 auto;
+            padding:
+                calc(24px + env(safe-area-inset-top))
+                16px
+                calc(40px + env(safe-area-inset-bottom));
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .card {
+            margin-bottom: 16px;
+            padding: 20px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
+        }
+
+        .card h2 {
+            margin: 0 0 16px;
+            font-size: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-height: 48px;
+            margin-bottom: 14px;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background: white;
+            color: #111827;
+            font-size: 16px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            outline: 2px solid rgba(37, 99, 235, 0.15);
+        }
+
+        button {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 16px;
+            border: 0;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.99);
+        }
+
+        .secondary-button {
+            margin-top: 10px;
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .danger-button {
+            margin-top: 10px;
+            background: #dc2626;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .summary-item {
+            padding: 16px;
+            border-radius: 14px;
+            background: #f9fafb;
+        }
+
+        .summary-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .summary-value {
+            font-size: 25px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .remaining-positive {
+            color: #15803d;
+        }
+
+        .remaining-negative {
+            color: #dc2626;
+        }
+
+        .expense-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .expense-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-information {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .expense-name {
+            margin-bottom: 4px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .expense-details {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .expense-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .expense-amount {
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .delete-button {
+            width: auto;
+            min-height: auto;
+            padding: 8px 10px;
+            background: #fee2e2;
+            color: #b91c1c;
+            font-size: 13px;
+        }
+
+        .empty-message {
+            margin: 0;
+            padding: 10px 0;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .message {
+            min-height: 22px;
+            margin: 10px 0 0;
+            color: #dc2626;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .notice {
+            margin: 12px 0 0;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        @media (min-width: 520px) {
+            .summary-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .summary-value {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+        <h1>My Budget</h1>
+        <p class="subtitle">
+            Track your salary, expenses and remaining balance.
+        </p>
+
+        <!-- Salary section -->
+        <section class="card">
+            <h2>Monthly salary</h2>
+
+            <label for="salaryInput">Salary amount</label>
+            <input
+                id="salaryInput"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="0.01"
+                placeholder="For example, 3000"
+            >
+
+            <button id="saveSalaryButton" type="button">
+                Save salary
+            </button>
+
+            <p id="salaryMessage" class="message"></p>
+        </section>
+
+        <!-- Summary section -->
+        <section class="card">
+            <h2>Monthly summary</h2>
+
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-label">Salary</span>
+                    <span id="salaryDisplay" class="summary-value">
+                        €0.00
+                    </span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Expenses</span>
+                    <span id="expensesDisplay" class="summary-value">
+                        €0.00
+                    </span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Remaining</span>
+                    <span
+                        id="remainingDisplay"
+                        class="summary-value remaining-positive"
+                    >
+                        €0.00
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add expense section -->
+        <section class="card">
+            <h2>Add an expense</h2>
+
+            <label for="expenseNameInput">Expense description</label>
+            <input
+                id="expenseNameInput"
+                type="text"
+                maxlength="80"
+                placeholder="For example, Rent"
+            >
+
+            <label for="expenseCategoryInput">Category</label>
+            <select id="expenseCategoryInput">
+                <option value="Housing">Housing</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Transport">Transport</option>
+                <option value="Bills">Bills</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Health">Health</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="expenseAmountInput">Expense amount</label>
+            <input
+                id="expenseAmountInput"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="0.01"
+                placeholder="For example, 250"
+            >
+
+            <button id="addExpenseButton" type="button">
+                Add expense
+            </button>
+
+            <p id="expenseMessage" class="message"></p>
+        </section>
+
+        <!-- Expense history -->
+        <section class="card">
+            <h2>Expenses</h2>
+
+            <p id="emptyMessage" class="empty-message">
+                You have not entered any expenses yet.
+            </p>
+
+            <ul id="expenseList" class="expense-list"></ul>
+        </section>
+
+        <!-- Reset section -->
+        <section class="card">
+            <h2>New month</h2>
+
+            <p class="notice">
+                Resetting will permanently remove the salary and all
+                expenses saved in this browser.
+            </p>
+
+            <button
+                id="resetButton"
+                class="danger-button"
+                type="button"
+            >
+                Reset everything
+            </button>
+        </section>
+    </main>
+
+    <script>
+        "use strict";
+
+        /*
+         * Change this value if you want a different currency.
+         *
+         * EUR = euro
+         * GBP = British pound
+         * USD = US dollar
+         */
+        const CURRENCY = "EUR";
+
+        /*
+         * These are the names used to save the information
+         * inside the browser.
+         */
+        const SALARY_STORAGE_KEY = "budgetAppSalary";
+        const EXPENSES_STORAGE_KEY = "budgetAppExpenses";
+
+        /*
+         * Load previously saved information.
+         */
+        let salary = loadSalary();
+        let expenses = loadExpenses();
+
+        /*
+         * Find the page elements.
+         */
+        const salaryInput =
+            document.getElementById("salaryInput");
+
+        const salaryDisplay =
+            document.getElementById("salaryDisplay");
+
+        const expensesDisplay =
+            document.getElementById("expensesDisplay");
+
+        const remainingDisplay =
+            document.getElementById("remainingDisplay");
+
+        const expenseNameInput =
+            document.getElementById("expenseNameInput");
+
+        const expenseCategoryInput =
+            document.getElementById("expenseCategoryInput");
+
+        const expenseAmountInput =
+            document.getElementById("expenseAmountInput");
+
+        const expenseList =
+            document.getElementById("expenseList");
+
+        const emptyMessage =
+            document.getElementById("emptyMessage");
+
+        const salaryMessage =
+            document.getElementById("salaryMessage");
+
+        const expenseMessage =
+            document.getElementById("expenseMessage");
+
+        /*
+         * Format an amount as euro currency.
+         */
+        function formatMoney(amount) {
+            return new Intl.NumberFormat("en-GB", {
+                style: "currency",
+                currency: CURRENCY
+            }).format(amount);
+        }
+
+        /*
+         * Read the salary from browser storage.
+         */
+        function loadSalary() {
+            try {
+                const storedSalary =
+                    localStorage.getItem(SALARY_STORAGE_KEY);
+
+                if (storedSalary === null) {
+                    return 0;
+                }
+
+                const parsedSalary = Number(storedSalary);
+
+                return Number.isFinite(parsedSalary)
+                    ? parsedSalary
+                    : 0;
+            } catch (error) {
+                console.error("Could not load salary:", error);
+                return 0;
+            }
+        }
+
+        /*
+         * Read the expense array from browser storage.
+         */
+        function loadExpenses() {
+            try {
+                const storedExpenses =
+                    localStorage.getItem(EXPENSES_STORAGE_KEY);
+
+                if (!storedExpenses) {
+                    return [];
+                }
+
+                const parsedExpenses =
+                    JSON.parse(storedExpenses);
+
+                return Array.isArray(parsedExpenses)
+                    ? parsedExpenses
+                    : [];
+            } catch (error) {
+                console.error("Could not load expenses:", error);
+                return [];
+            }
+        }
+
+        /*
+         * Save the current salary and expense list.
+         */
+        function saveData() {
+            try {
+                localStorage.setItem(
+                    SALARY_STORAGE_KEY,
+                    String(salary)
+                );
+
+                localStorage.setItem(
+                    EXPENSES_STORAGE_KEY,
+                    JSON.stringify(expenses)
+                );
+            } catch (error) {
+                console.error("Could not save data:", error);
+
+                window.alert(
+                    "Your information could not be saved. " +
+                    "Check whether Safari storage is available."
+                );
+            }
+        }
+
+        /*
+         * Add all expenses together.
+         */
+        function calculateTotalExpenses() {
+            return expenses.reduce(
+                (total, expense) => total + expense.amount,
+                0
+            );
+        }
+
+        /*
+         * Escape text before placing it inside HTML.
+         * This prevents expense names from becoming HTML code.
+         */
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        /*
+         * Draw the complete app again whenever data changes.
+         */
+        function renderApp() {
+            const totalExpenses =
+                calculateTotalExpenses();
+
+            const remaining =
+                salary - totalExpenses;
+
+            salaryDisplay.textContent =
+                formatMoney(salary);
+
+            expensesDisplay.textContent =
+                formatMoney(totalExpenses);
+
+            remainingDisplay.textContent =
+                formatMoney(remaining);
+
+            remainingDisplay.classList.toggle(
+                "remaining-negative",
+                remaining < 0
+            );
+
+            remainingDisplay.classList.toggle(
+                "remaining-positive",
+                remaining >= 0
+            );
+
+            salaryInput.value =
+                salary > 0 ? salary : "";
+
+            renderExpenseList();
+        }
+
+        /*
+         * Draw each saved expense.
+         */
+        function renderExpenseList() {
+            expenseList.innerHTML = "";
+
+            emptyMessage.hidden =
+                expenses.length > 0;
+
+            /*
+             * Most recently added expense appears first.
+             */
+            const newestFirst = [...expenses].reverse();
+
+            newestFirst.forEach((expense) => {
+                const item =
+                    document.createElement("li");
+
+                item.className = "expense-item";
+
+                const date = new Date(expense.date);
+
+                const formattedDate =
+                    Number.isNaN(date.getTime())
+                        ? ""
+                        : date.toLocaleDateString("en-GB");
+
+                item.innerHTML = `
+                    <div class="expense-information">
+                        <div class="expense-name">
+                            ${escapeHtml(expense.name)}
+                        </div>
+
+                        <div class="expense-details">
+                            ${escapeHtml(expense.category)}
+                            ${formattedDate
+                                ? " · " + formattedDate
+                                : ""}
+                        </div>
+                    </div>
+
+                    <div class="expense-right">
+                        <span class="expense-amount">
+                            ${formatMoney(expense.amount)}
+                        </span>
+
+                        <button
+                            type="button"
+                            class="delete-button"
+                            data-expense-id="${expense.id}"
+                            aria-label="Delete ${escapeHtml(expense.name)}"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                `;
+
+                expenseList.appendChild(item);
+            });
+        }
+
+        /*
+         * Save or update the salary.
+         */
+        function saveSalary() {
+            salaryMessage.textContent = "";
+
+            const enteredSalary =
+                Number(salaryInput.value);
+
+            if (
+                !Number.isFinite(enteredSalary) ||
+                enteredSalary < 0
+            ) {
+                salaryMessage.textContent =
+                    "Enter a valid salary amount.";
+
+                return;
+            }
+
+            salary = enteredSalary;
+
+            saveData();
+            renderApp();
+
+            salaryMessage.style.color = "#15803d";
+            salaryMessage.textContent =
+                "Salary saved successfully.";
+
+            window.setTimeout(() => {
+                salaryMessage.textContent = "";
+                salaryMessage.style.color = "";
+            }, 2000);
+        }
+
+        /*
+         * Add a new expense.
+         */
+        function addExpense() {
+            expenseMessage.textContent = "";
+
+            const name =
+                expenseNameInput.value.trim();
+
+            const category =
+                expenseCategoryInput.value;
+
+            const amount =
+                Number(expenseAmountInput.value);
+
+            if (!name) {
+                expenseMessage.textContent =
+                    "Enter an expense description.";
+
+                expenseNameInput.focus();
+                return;
+            }
+
+            if (
+                !Number.isFinite(amount) ||
+                amount <= 0
+            ) {
+                expenseMessage.textContent =
+                    "Enter an expense amount greater than zero.";
+
+                expenseAmountInput.focus();
+                return;
+            }
+
+            const newExpense = {
+                id:
+                    window.crypto &&
+                    typeof window.crypto.randomUUID === "function"
+                        ? window.crypto.randomUUID()
+                        : String(Date.now()),
+
+                name: name,
+                category: category,
+                amount: amount,
+                date: new Date().toISOString()
+            };
+
+            expenses.push(newExpense);
+
+            saveData();
+            renderApp();
+
+            expenseNameInput.value = "";
+            expenseAmountInput.value = "";
+            expenseCategoryInput.value = "Housing";
+
+            expenseNameInput.focus();
+        }
+
+        /*
+         * Delete one expense.
+         */
+        function deleteExpense(expenseId) {
+            const expense =
+                expenses.find(
+                    (item) => item.id === expenseId
+                );
+
+            if (!expense) {
+                return;
+            }
+
+            const shouldDelete =
+                window.confirm(
+                    `Delete "${expense.name}" for ` +
+                    `${formatMoney(expense.amount)}?`
+                );
+
+            if (!shouldDelete) {
+                return;
+            }
+
+            expenses = expenses.filter(
+                (item) => item.id !== expenseId
+            );
+
+            saveData();
+            renderApp();
+        }
+
+        /*
+         * Remove all information for a new month.
+         */
+        function resetEverything() {
+            const shouldReset =
+                window.confirm(
+                    "Delete the salary and every expense? " +
+                    "This cannot be undone."
+                );
+
+            if (!shouldReset) {
+                return;
+            }
+
+            salary = 0;
+            expenses = [];
+
+            saveData();
+            renderApp();
+
+            expenseNameInput.value = "";
+            expenseAmountInput.value = "";
+        }
+
+        /*
+         * Button actions.
+         */
+        document
+            .getElementById("saveSalaryButton")
+            .addEventListener("click", saveSalary);
+
+        document
+            .getElementById("addExpenseButton")
+            .addEventListener("click", addExpense);
+
+        document
+            .getElementById("resetButton")
+            .addEventListener("click", resetEverything);
+
+        /*
+         * Delete buttons are generated dynamically,
+         * so the click is handled through the list.
+         */
+        expenseList.addEventListener("click", (event) => {
+            const deleteButton =
+                event.target.closest(".delete-button");
+
+            if (!deleteButton) {
+                return;
+            }
+
+            deleteExpense(
+                deleteButton.dataset.expenseId
+            );
+        });
+
+        /*
+         * Pressing Enter inside an input performs
+         * the expected action.
+         */
+        salaryInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                saveSalary();
+            }
+        });
+
+        expenseAmountInput.addEventListener(
+            "keydown",
+            (event) => {
+                if (event.key === "Enter") {
+                    addExpense();
+                }
+            }
+        );
+
+        expenseNameInput.addEventListener(
+            "keydown",
+            (event) => {
+                if (event.key === "Enter") {
+                    expenseAmountInput.focus();
+                }
+            }
+        );
+
+        /*
+         * Display the saved information when the page opens.
+         */
+        renderApp();
+    </script>
+</body>
+</html>
