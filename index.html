@@ -28,6 +28,10 @@
       --amber-soft: rgba(180, 83, 9, 0.12);
       --red: #dc2626;
       --red-soft: rgba(220, 38, 38, 0.12);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.12);
+      --cyan: #0891b2;
+      --cyan-soft: rgba(8, 145, 178, 0.12);
       --shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
       --radius: 20px;
     }
@@ -48,6 +52,10 @@
         --amber-soft: rgba(251, 191, 36, 0.14);
         --red: #f87171;
         --red-soft: rgba(248, 113, 113, 0.14);
+        --purple: #c084fc;
+        --purple-soft: rgba(192, 132, 252, 0.14);
+        --cyan: #22d3ee;
+        --cyan-soft: rgba(34, 211, 238, 0.14);
         --shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
       }
     }
@@ -453,6 +461,283 @@
       .expense { grid-template-columns: minmax(0, 1fr) 250px; align-items: center; }
     }
 
+
+    /* Premium dashboard */
+    .dashboard-hero {
+      display: grid;
+      place-items: center;
+      gap: 12px;
+      padding: 4px 0 2px;
+      text-align: center;
+    }
+
+    .budget-ring {
+      --ring-progress: 0deg;
+      --ring-color: var(--green);
+      position: relative;
+      width: 190px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        conic-gradient(var(--ring-color) var(--ring-progress), var(--border) 0);
+      transition: background .5s ease;
+    }
+
+    .budget-ring::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      background: var(--card);
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+
+    .budget-ring-content {
+      position: relative;
+      z-index: 1;
+      width: 130px;
+    }
+
+    .ring-value {
+      display: block;
+      font-size: 27px;
+      line-height: 1.1;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .ring-label {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .ring-percent {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 27px;
+      margin-top: 8px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .ring-percent.warn {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .ring-percent.over {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .daily-allowance {
+      width: min(100%, 330px);
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--surface);
+    }
+
+    .daily-allowance-label {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .daily-allowance-value {
+      display: block;
+      margin-top: 3px;
+      color: var(--cyan);
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .daily-allowance-note {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .metric.metric-income {
+      background: var(--primary-soft);
+      border-color: transparent;
+    }
+
+    .metric.metric-spent {
+      background: var(--red-soft);
+      border-color: transparent;
+    }
+
+    .metric.metric-remaining {
+      background: var(--green-soft);
+      border-color: transparent;
+    }
+
+    .metric.metric-count {
+      background: var(--purple-soft);
+      border-color: transparent;
+    }
+
+    .metric.metric-biggest {
+      background: var(--amber-soft);
+      border-color: transparent;
+    }
+
+    .metric.metric-average {
+      background: var(--cyan-soft);
+      border-color: transparent;
+    }
+
+    .metric-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 27px;
+      height: 27px;
+      margin-bottom: 7px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.55);
+      font-size: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .metric-icon {
+        background: rgba(255,255,255,.08);
+      }
+    }
+
+    .metric.metric-remaining .metric-value {
+      font-size: 22px;
+    }
+
+    .dashboard-secondary {
+      margin-top: 9px;
+    }
+
+    @media (max-width: 390px) {
+      .budget-ring { width: 170px; }
+      .budget-ring::before { inset: 13px; }
+      .ring-value { font-size: 24px; }
+      .daily-allowance-value { font-size: 21px; }
+    }
+
+
+    /* More compact month selector */
+    .month-card {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .month-card .month-row {
+      grid-template-columns: 36px minmax(0, 1fr) 36px;
+      gap: 6px;
+    }
+
+    .month-card .icon-button {
+      min-width: 36px;
+      width: 36px;
+      height: 36px;
+    }
+
+    .month-card input[type="month"] {
+      min-height: 38px;
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+
+    /* Swipe actions for expense rows */
+    .expense {
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+      border-bottom: 1px solid var(--border);
+      touch-action: pan-y;
+    }
+
+    .expense-swipe-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .expense-swipe-bg .swipe-pin,
+    .expense-swipe-bg .swipe-delete {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 18px;
+      opacity: 0;
+      transition: opacity .12s ease;
+    }
+
+    .expense-swipe-bg .swipe-pin {
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .expense-swipe-bg .swipe-delete {
+      margin-left: auto;
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .expense.swiping-right .swipe-pin,
+    .expense.swiping-left .swipe-delete {
+      opacity: 1;
+    }
+
+    .expense-content {
+      position: relative;
+      z-index: 1;
+      padding: 11px 0;
+      background: var(--card);
+      will-change: transform;
+      transition: transform .18s ease;
+    }
+
+    .expense.is-swiping .expense-content {
+      transition: none;
+    }
+
+    .expense:last-child {
+      border-bottom: 0;
+    }
+
+    @media (max-width: 390px) {
+      .month-card {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .month-card .month-row {
+        grid-template-columns: 34px minmax(0, 1fr) 34px;
+        gap: 5px;
+      }
+
+      .month-card .icon-button {
+        min-width: 34px;
+        width: 34px;
+        height: 34px;
+      }
+    }
+
     @media print {
       body { background: white; color: black; }
       .no-print, .fab, dialog { display: none !important; }
@@ -596,7 +881,7 @@
       <button id="settingsButton" class="icon-button no-print" type="button" aria-label="Open data tools">⋯</button>
     </header>
 
-    <section class="card no-print">
+    <section class="card month-card no-print">
       <h2>Budget month</h2>
       <div class="month-row">
         <button id="previousMonthButton" class="icon-button" type="button" aria-label="Previous month">‹</button>
@@ -609,48 +894,63 @@
       <p class="inline-note">Every month is saved separately. Switching months does not delete anything.</p>
     </section>
 
+
     <section class="card">
       <h2>Dashboard — <span id="monthTitle"></span></h2>
-      <div class="summary">
-        <div class="metric">
+
+      <div class="dashboard-hero">
+        <div id="budgetRing" class="budget-ring" role="img" aria-label="Remaining budget">
+          <div class="budget-ring-content">
+            <span id="ringRemainingDisplay" class="ring-value">€0.00</span>
+            <span class="ring-label">Remaining</span>
+            <span id="ringPercentDisplay" class="ring-percent">0% left</span>
+          </div>
+        </div>
+
+        <div class="daily-allowance">
+          <span class="daily-allowance-label">Safe to spend today</span>
+          <span id="dailyAllowanceDisplay" class="daily-allowance-value">€0.00</span>
+          <span id="dailyAllowanceNote" class="daily-allowance-note">Based on the remaining days in this month</span>
+        </div>
+      </div>
+
+      <div class="summary" style="margin-top:12px">
+        <div class="metric metric-income">
+          <span class="metric-icon" aria-hidden="true">💶</span>
           <span class="metric-label">Total income</span>
           <span id="totalIncomeDisplay" class="metric-value">€0.00</span>
         </div>
-        <div class="metric">
+        <div class="metric metric-spent">
+          <span class="metric-icon" aria-hidden="true">💳</span>
           <span class="metric-label">Total spent</span>
           <span id="totalSpentDisplay" class="metric-value">€0.00</span>
         </div>
-        <div class="metric">
+        <div class="metric metric-remaining">
+          <span class="metric-icon" aria-hidden="true">💰</span>
           <span class="metric-label">Remaining</span>
           <span id="remainingDisplay" class="metric-value positive">€0.00</span>
         </div>
-        <div class="metric">
+        <div class="metric metric-count">
+          <span class="metric-icon" aria-hidden="true">🧾</span>
           <span class="metric-label">Expenses</span>
           <span id="expenseCountDisplay" class="metric-value">0</span>
         </div>
       </div>
 
-      <div class="grid-2" style="margin-top:10px">
-        <div class="metric">
+      <div class="grid-2 dashboard-secondary">
+        <div class="metric metric-biggest">
+          <span class="metric-icon" aria-hidden="true">📌</span>
           <span class="metric-label">Biggest expense</span>
           <span id="biggestExpenseDisplay" class="metric-value">—</span>
         </div>
-        <div class="metric">
+        <div class="metric metric-average">
+          <span class="metric-icon" aria-hidden="true">📊</span>
           <span class="metric-label">Average expense</span>
           <span id="averageExpenseDisplay" class="metric-value">€0.00</span>
         </div>
       </div>
-
-      <div class="progress-wrap">
-        <div class="progress-line">
-          <span>Income spent</span>
-          <span id="progressLabel">0%</span>
-        </div>
-        <div id="progressTrack" class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-      </div>
     </section>
+
 
     <section class="card no-print">
       <h2>Income</h2>
@@ -1025,6 +1325,19 @@
       return { totalIncome, totalSpent, remaining, biggest, average };
     }
 
+
+    function daysRemainingInSelectedMonth() {
+      const [year, month] = selectedMonth.split("-").map(Number);
+      const lastDay = new Date(year, month, 0).getDate();
+
+      if (selectedMonth !== currentMonthKey()) {
+        return lastDay;
+      }
+
+      const today = new Date();
+      return Math.max(lastDay - today.getDate() + 1, 1);
+    }
+
     function render() {
       const month = monthData();
       const t = totals(month);
@@ -1045,12 +1358,50 @@
         : "—";
       $("averageExpenseDisplay").textContent = formatMoney(t.average);
 
-      let percent = t.totalIncome > 0 ? (t.totalSpent / t.totalIncome) * 100 : (t.totalSpent > 0 ? 100 : 0);
-      $("progressLabel").textContent = t.totalIncome > 0 ? `${Math.round(percent)}%` : (t.totalSpent ? "No income entered" : "0%");
-      $("progressFill").style.width = `${Math.min(percent, 100)}%`;
-      $("progressFill").classList.toggle("warn", percent >= 75 && percent <= 100);
-      $("progressFill").classList.toggle("over", percent > 100);
-      $("progressTrack").setAttribute("aria-valuenow", String(Math.min(Math.round(percent), 100)));
+      const spentPercent = t.totalIncome > 0
+        ? (t.totalSpent / t.totalIncome) * 100
+        : (t.totalSpent > 0 ? 100 : 0);
+
+      const remainingPercent = t.totalIncome > 0
+        ? Math.max((t.remaining / t.totalIncome) * 100, 0)
+        : 0;
+
+      const ring = $("budgetRing");
+      const ringPercent = Math.min(Math.max(remainingPercent, 0), 100);
+      const ringDegrees = ringPercent * 3.6;
+      const ringColor = t.remaining < 0
+        ? "var(--red)"
+        : remainingPercent < 20
+          ? "var(--red)"
+          : remainingPercent < 50
+            ? "var(--amber)"
+            : "var(--green)";
+
+      ring.style.setProperty("--ring-progress", `${ringDegrees}deg`);
+      ring.style.setProperty("--ring-color", ringColor);
+      ring.setAttribute(
+        "aria-label",
+        `${formatMoney(t.remaining)} remaining, ${Math.round(remainingPercent)} percent of income left`
+      );
+
+      $("ringRemainingDisplay").textContent = formatMoney(t.remaining);
+      $("ringRemainingDisplay").classList.toggle("positive", t.remaining >= 0);
+      $("ringRemainingDisplay").classList.toggle("negative", t.remaining < 0);
+
+      const ringPercentDisplay = $("ringPercentDisplay");
+      ringPercentDisplay.textContent = t.totalIncome > 0
+        ? `${Math.round(remainingPercent)}% left`
+        : (t.totalSpent > 0 ? "No income entered" : "0% left");
+      ringPercentDisplay.classList.toggle("warn", t.remaining >= 0 && remainingPercent < 50 && remainingPercent >= 20);
+      ringPercentDisplay.classList.toggle("over", t.remaining < 0 || remainingPercent < 20);
+
+      const daysRemaining = daysRemainingInSelectedMonth();
+      const dailyAllowance = t.remaining > 0 ? t.remaining / daysRemaining : 0;
+      $("dailyAllowanceDisplay").textContent = formatMoney(dailyAllowance);
+      $("dailyAllowanceDisplay").classList.toggle("negative", t.remaining < 0);
+      $("dailyAllowanceNote").textContent = selectedMonth === currentMonthKey()
+        ? `${daysRemaining} day${daysRemaining === 1 ? "" : "s"} remaining in this month`
+        : `Average per day across ${daysRemaining} days`;
 
       renderExpenses();
     }
@@ -1088,12 +1439,18 @@
       for (const e of entries) {
         const li = document.createElement("li");
         li.className = "expense";
+        li.dataset.id = e.id;
         li.innerHTML = `
-          <div>
+          <div class="expense-swipe-bg" aria-hidden="true">
+            <span class="swipe-pin">📌 ${e.pinned ? "Unpin" : "Pin"}</span>
+            <span class="swipe-delete">Delete 🗑</span>
+          </div>
+
+          <div class="expense-content">
             <div class="expense-head">
               <div style="min-width:0">
                 <div class="expense-title">${escapeHtml(e.name)}</div>
-                  </div>
+              </div>
               <div class="expense-amount">${formatMoney(e.amount)}</div>
             </div>
 
@@ -1117,7 +1474,85 @@
           </div>
         `;
         expenseList.appendChild(li);
+        enableExpenseSwipe(li);
       }
+    }
+
+
+    function enableExpenseSwipe(li) {
+      const content = li.querySelector(".expense-content");
+      if (!content) return;
+
+      let startX = 0;
+      let startY = 0;
+      let deltaX = 0;
+      let swiping = false;
+      let horizontalGesture = false;
+
+      const resetSwipe = () => {
+        li.classList.remove("is-swiping", "swiping-left", "swiping-right");
+        content.style.transform = "";
+        deltaX = 0;
+        swiping = false;
+        horizontalGesture = false;
+      };
+
+      li.addEventListener("touchstart", (event) => {
+        if (event.touches.length !== 1 || event.target.closest("button")) return;
+        const touch = event.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        deltaX = 0;
+        swiping = true;
+        horizontalGesture = false;
+        li.classList.add("is-swiping");
+      }, { passive: true });
+
+      li.addEventListener("touchmove", (event) => {
+        if (!swiping || event.touches.length !== 1) return;
+
+        const touch = event.touches[0];
+        const moveX = touch.clientX - startX;
+        const moveY = touch.clientY - startY;
+
+        if (!horizontalGesture) {
+          if (Math.abs(moveY) > Math.abs(moveX) && Math.abs(moveY) > 8) {
+            resetSwipe();
+            return;
+          }
+          if (Math.abs(moveX) > 8) horizontalGesture = true;
+        }
+
+        if (!horizontalGesture) return;
+
+        event.preventDefault();
+        deltaX = Math.max(-110, Math.min(110, moveX));
+        content.style.transform = `translateX(${deltaX}px)`;
+        li.classList.toggle("swiping-right", deltaX > 0);
+        li.classList.toggle("swiping-left", deltaX < 0);
+      }, { passive: false });
+
+      li.addEventListener("touchend", () => {
+        if (!swiping) return;
+        const id = li.dataset.id;
+        const threshold = 72;
+
+        if (horizontalGesture && deltaX >= threshold) {
+          resetSwipe();
+          togglePin(id);
+          return;
+        }
+
+        if (horizontalGesture && deltaX <= -threshold) {
+          resetSwipe();
+          deleteExpense(id);
+          return;
+        }
+
+        resetSwipe();
+      });
+
+      li.addEventListener("touchcancel", resetSwipe);
     }
 
     function scheduleIncomeSave() {
