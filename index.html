@@ -9,7 +9,7 @@
 <meta content="#39a844" name="theme-color"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="apple-touch-icon.png" rel="icon" sizes="180x180" type="image/png"/>
-<title>My Budget v8.2</title>
+<title>My Budget v8.3</title>
 <style>:root {
       color-scheme: light dark;
       --bg: #f2f4f7;
@@ -2228,7 +2228,40 @@ dialog::backdrop {
 .currency-note {
   margin-top: 7px;
 }
-</style><meta content="8.2" name="application-version"/></head>
+
+
+
+/* =========================================================
+   v8.3 Currency symbol and ring-fit correction
+   ========================================================= */
+#ringRemainingDisplay {
+  width: auto !important;
+  max-width: 148px !important;
+  padding: 0 3px;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-align: center;
+  line-height: 1.02;
+  letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.budget-ring-content {
+  width: 150px !important;
+  max-width: calc(100% - 30px);
+}
+
+@media (max-width: 390px) {
+  #ringRemainingDisplay {
+    max-width: 136px !important;
+  }
+
+  .budget-ring-content {
+    width: 138px !important;
+  }
+}
+</style><meta content="8.3" name="application-version"/></head>
 <body>
 <main class="app">
 <header class="topbar">
@@ -2259,7 +2292,6 @@ dialog::backdrop {
           Changing the currency updates how amounts are displayed. Existing values are not converted using exchange rates.
         </p>
 </div>
-
 <p class="inline-note">Every month is saved separately. Switching months does not delete anything.</p>
 </section>
 <section class="card">
@@ -2711,8 +2743,47 @@ dialog::backdrop {
     function formatMoney(value) {
       return new Intl.NumberFormat(LOCALE, {
         style: "currency",
-        currency: CURRENCY
-      }).format(Number(value) || 0);
+        currency: CURRENCY,
+        currencyDisplay: "narrowSymbol",
+        currencyDisplay: "narrowSymbol"
+      }
+
+    function formatRingMoney(value) {
+      const parts = new Intl.NumberFormat(LOCALE, {
+        style: "currency",
+        currency: CURRENCY,
+        currencyDisplay: "narrowSymbol",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).formatToParts(Number(value) || 0);
+
+      const symbol = parts
+        .filter((part) => part.type === "currency")
+        .map((part) => part.value)
+        .join("");
+
+      const number = parts
+        .filter((part) => !["currency", "literal"].includes(part.type))
+        .map((part) => part.value)
+        .join("");
+
+      return `${number}\u00A0${symbol}`;
+    }
+
+    function fitRingAmount() {
+      const element = $("ringRemainingDisplay");
+      if (!element) return;
+
+      const textLength = element.textContent.trim().length;
+      let size = 27;
+
+      if (textLength >= 15) size = 18;
+      else if (textLength >= 13) size = 20;
+      else if (textLength >= 11) size = 22;
+      else if (textLength >= 9) size = 24;
+
+      element.style.fontSize = `${size}px`;
+    }).format(Number(value) || 0);
     }
 
     function formatMonth(key) {
@@ -2875,7 +2946,8 @@ dialog::backdrop {
         `${formatMoney(t.remaining)} remaining, ${Math.round(remainingPercent)} percent of income left`
       );
 
-      $("ringRemainingDisplay").textContent = formatMoney(t.remaining);
+      $("ringRemainingDisplay").textContent = formatRingMoney(t.remaining);
+      fitRingAmount();
       $("ringRemainingDisplay").classList.toggle("positive", t.remaining >= 0);
       $("ringRemainingDisplay").classList.toggle("negative", t.remaining < 0);
 
