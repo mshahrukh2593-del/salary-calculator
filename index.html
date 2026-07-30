@@ -1366,6 +1366,381 @@
     }
 
   </style>
+
+<style>
+/* Keep the full value on one line and always match the active ring color */
+.budget-ring-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ringRemainingDisplay,
+.ring-value {
+  display: block !important;
+  width: max-content;
+  max-width: none;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  color: var(--ring-color) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.22);
+  transition: color .35s ease;
+}
+
+/* Any nested currency symbol inherits exactly the same live ring color */
+#ringRemainingDisplay .currency,
+.ring-value .currency,
+.currency-symbol {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor;
+}
+
+@media (max-width: 390px) {
+  #ringRemainingDisplay,
+  .ring-value {
+    font-size: clamp(21px, 7vw, 27px);
+  }
+}
+</style>
+
+
+<style>
+/* Cleaner expense rows: tap to edit, swipe right to pin, swipe left to delete */
+.expense-content {
+  cursor: pointer;
+  border-radius: 12px;
+  transition: transform .18s ease, background-color .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.expense-content:active {
+  background: rgba(255,255,255,.025);
+}
+
+.expense-meta-row {
+  justify-content: flex-start !important;
+}
+
+/* Large action buttons are no longer needed */
+.expense-actions {
+  display: none !important;
+}
+
+/* Keep status indicators compact */
+.icon-badge {
+  width: 23px !important;
+  min-width: 23px !important;
+  height: 23px !important;
+  min-height: 23px !important;
+  font-size: 12px !important;
+}
+
+@media (max-width: 390px) {
+  .expense-meta-row .badges {
+    gap: 4px;
+  }
+
+  .badge {
+    min-height: 22px;
+    padding: 3px 7px;
+  }
+
+  .expense-content {
+    padding-right: 2px;
+  }
+}
+</style>
+
+
+<style>
+/* Consistent spacing and alignment inside add/edit expense dialogs */
+#expenseDialog form,
+#editExpenseDialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+#expenseDialog .form-grid,
+#editExpenseDialog .form-grid {
+  display: grid;
+  gap: 14px 16px !important;
+}
+
+#expenseDialog .field,
+#editExpenseDialog .field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px !important;
+  margin: 0 !important;
+}
+
+#expenseDialog label,
+#editExpenseDialog label {
+  display: block;
+  margin: 0 !important;
+  line-height: 1.2;
+}
+
+#expenseDialog input,
+#expenseDialog select,
+#expenseDialog textarea,
+#editExpenseDialog input,
+#editExpenseDialog select,
+#editExpenseDialog textarea {
+  margin: 0 !important;
+}
+
+#expenseDialog .checkbox-row,
+#editExpenseDialog .checkbox-row {
+  margin-top: 14px !important;
+}
+
+#expenseDialog .checkbox-row + .checkbox-row,
+#editExpenseDialog .checkbox-row + .checkbox-row {
+  margin-top: 10px !important;
+}
+
+#expenseDialog .dialog-actions,
+#editExpenseDialog .dialog-actions {
+  margin-top: 16px !important;
+  gap: 12px !important;
+}
+
+#expenseDialog textarea,
+#editExpenseDialog textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+@media (max-width: 640px) {
+  #expenseDialog .form-grid,
+  #editExpenseDialog .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 13px !important;
+  }
+
+  #expenseDialog .field,
+  #editExpenseDialog .field {
+    gap: 6px !important;
+  }
+
+  #expenseDialog .checkbox-row,
+  #editExpenseDialog .checkbox-row {
+    min-height: 58px;
+    padding: 14px 16px !important;
+  }
+
+  #expenseDialog .dialog-actions,
+  #editExpenseDialog .dialog-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>
+
+
+<style>
+/* One-time gesture onboarding */
+.gesture-onboarding-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(3, 8, 18, .54);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.gesture-onboarding-backdrop.show {
+  display: flex;
+}
+
+.gesture-onboarding-sheet {
+  width: min(520px, 100%);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 26px;
+  padding: 20px;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.055), rgba(255,255,255,0) 48%),
+    #141b26;
+  box-shadow: 0 24px 70px rgba(0,0,0,.42);
+  transform: translateY(28px);
+  opacity: 0;
+  animation: gestureSheetIn .34s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes gestureSheetIn {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.gesture-onboarding-kicker {
+  margin: 0 0 4px;
+  color: #7db7ff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+
+.gesture-onboarding-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.gesture-onboarding-copy {
+  margin: 8px 0 16px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.gesture-guide {
+  display: grid;
+  gap: 10px;
+}
+
+.gesture-guide-row {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: center;
+  min-height: 62px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 16px;
+  background: rgba(255,255,255,.025);
+}
+
+.gesture-guide-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(79, 145, 255, .13);
+  color: #67a8ff;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.gesture-guide-label {
+  display: block;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.gesture-guide-description {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.gesture-onboarding-options {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 15px 2px 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.gesture-onboarding-options input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.gesture-onboarding-button {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #5ba2ff, #3378e8);
+  color: #fff;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.gesture-onboarding-button:active {
+  transform: scale(.985);
+}
+
+/* First-row gesture demo */
+.expense.gesture-demo .expense-content {
+  animation: gestureRowDemo 1.35s ease-in-out .28s 1;
+}
+
+@keyframes gestureRowDemo {
+  0%, 18%, 48%, 78%, 100% { transform: translateX(0); }
+  32% { transform: translateX(22px); }
+  64% { transform: translateX(-22px); }
+}
+
+/* Tap feedback */
+.expense-content.tap-feedback {
+  animation: expenseTapFeedback .16s ease;
+}
+
+@keyframes expenseTapFeedback {
+  50% {
+    transform: scale(.988);
+    background: rgba(255,255,255,.045);
+  }
+}
+
+/* Toasts */
+.app-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 1400;
+  max-width: calc(100vw - 32px);
+  padding: 11px 15px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  background: rgba(17, 24, 35, .94);
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(0,0,0,.32);
+  opacity: 0;
+  transform: translate(-50%, 16px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 390px) {
+  .gesture-onboarding-sheet {
+    padding: 17px;
+    border-radius: 23px;
+  }
+
+  .gesture-onboarding-title {
+    font-size: 22px;
+  }
+
+  .gesture-guide-row {
+    min-height: 58px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -1528,6 +1903,7 @@
           <option value="highest">Highest amount</option>
           <option value="lowest">Lowest amount</option>
           <option value="alphabetical">Alphabetical</option>
+          <option value="category">Category</option>
         </select>
       </div>
 
@@ -1587,6 +1963,7 @@
         <option value="Health">Health</option>
         <option value="Travel">Travel</option>
         <option value="Education">Education</option>
+        <option value="Savings">Savings</option>
         <option value="Other">Other</option>
       </select>
 
@@ -1648,7 +2025,7 @@
 
     const EXPENSE_CATEGORIES = [
       "Housing", "Bills", "Groceries", "Transport", "Dining",
-      "Entertainment", "Shopping", "Health", "Travel", "Education", "Other"
+      "Entertainment", "Shopping", "Health", "Travel", "Education", "Savings", "Other"
     ];
 
     const CATEGORY_COLORS = {
@@ -1662,6 +2039,7 @@
       Health: "#06b6d4",
       Travel: "#6366f1",
       Education: "#84cc16",
+      Savings: "#10b981",
       Other: "#94a3b8"
     };
 
@@ -2073,6 +2451,19 @@
         if (sort === "highest") return b.amount - a.amount;
         if (sort === "lowest") return a.amount - b.amount;
         if (sort === "alphabetical") return a.name.localeCompare(b.name, LOCALE);
+        if (sort === "category") {
+          const categoryCompare = (a.category || "Other").localeCompare(
+            b.category || "Other",
+            LOCALE
+          );
+          if (categoryCompare !== 0) return categoryCompare;
+
+          const nameCompare = a.name.localeCompare(b.name, LOCALE);
+          if (nameCompare !== 0) return nameCompare;
+
+          return b.date.localeCompare(a.date) ||
+                 b.createdAt.localeCompare(a.createdAt);
+        }
         return 0;
       });
 
@@ -2094,7 +2485,7 @@
             <span class="swipe-delete">Delete 🗑</span>
           </div>
 
-          <div class="expense-content">
+          <div class="expense-content" role="button" tabindex="0" aria-label="Edit ${escapeHtml(e.name)}">
             <div class="expense-head">
               <div style="min-width:0">
                 <div class="expense-title">${escapeHtml(e.name)}</div>
@@ -2108,14 +2499,6 @@
                 <span class="badge category">${escapeHtml(e.category || "Other")}</span>
                 ${e.pinned ? '<span class="badge pin icon-badge" aria-label="Pinned" title="Pinned">📌</span>' : ""}
                 ${e.recurring ? '<span class="badge recurring icon-badge" aria-label="Recurring" title="Recurring">↻</span>' : ""}
-              </div>
-
-              <div class="expense-actions no-print">
-                <button class="small-btn btn soft-amber" data-action="pin" data-id="${escapeHtml(e.id)}" aria-label="${e.pinned ? "Unpin expense" : "Pin expense"}" title="${e.pinned ? "Unpin" : "Pin"}">
-                  ${e.pinned ? "Unpin" : "Pin"}
-                </button>
-                <button class="small-btn btn soft-primary" data-action="edit" data-id="${escapeHtml(e.id)}" aria-label="Edit expense" title="Edit">Edit</button>
-                <button class="small-btn btn soft-danger" data-action="delete" data-id="${escapeHtml(e.id)}" aria-label="Delete expense" title="Delete">Delete</button>
               </div>
             </div>
 
@@ -2185,14 +2568,20 @@
         if (!swiping) return;
         const id = li.dataset.id;
         const threshold = 72;
+        const wasHorizontalGesture = horizontalGesture;
 
-        if (horizontalGesture && deltaX >= threshold) {
+        if (wasHorizontalGesture) {
+          li.dataset.suppressClick = "1";
+          setTimeout(() => delete li.dataset.suppressClick, 350);
+        }
+
+        if (wasHorizontalGesture && deltaX >= threshold) {
           resetSwipe();
           togglePin(id);
           return;
         }
 
-        if (horizontalGesture && deltaX <= -threshold) {
+        if (wasHorizontalGesture && deltaX <= -threshold) {
           resetSwipe();
           deleteExpense(id);
           return;
@@ -2236,6 +2625,7 @@
     }
 
     function openNewExpense() {
+      showAppToast("💾 Expense updated");
       editingExpenseId = null;
       expenseDialogTitle.textContent = "Add expense";
       editBanner.classList.remove("show");
@@ -2336,6 +2726,7 @@
       expense.pinned = !expense.pinned;
       saveState();
       render();
+      showAppToast(expense.pinned ? "📌 Expense pinned" : "📌 Expense unpinned");
     }
 
     function deleteExpense(id) {
@@ -2346,6 +2737,7 @@
       month.expenses = month.expenses.filter((e) => e.id !== id);
       saveState();
       render();
+      showAppToast("🗑️ Expense deleted");
     }
 
     function changeMonth(offset) {
@@ -2550,12 +2942,19 @@
     saveExpenseButton.addEventListener("click", saveExpense);
 
     expenseList.addEventListener("click", (event) => {
-      const button = event.target.closest("button[data-id]");
-      if (!button) return;
-      const id = button.dataset.id;
-      if (button.dataset.action === "pin") togglePin(id);
-      if (button.dataset.action === "edit") openEditExpense(id);
-      if (button.dataset.action === "delete") deleteExpense(id);
+      const expense = event.target.closest(".expense");
+      const content = event.target.closest(".expense-content");
+      if (!expense || !content || expense.dataset.suppressClick === "1") return;
+      openEditExpense(expense.dataset.id);
+    });
+
+    expenseList.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const content = event.target.closest(".expense-content");
+      const expense = event.target.closest(".expense");
+      if (!content || !expense) return;
+      event.preventDefault();
+      openEditExpense(expense.dataset.id);
     });
 
     $("copyRecurringButton").addEventListener("click", copyRecurring);
@@ -2603,6 +3002,126 @@
     saveState();
     render();
   </script>
+
+
+
+
+<div id="gestureOnboarding" class="gesture-onboarding-backdrop" aria-hidden="true">
+  <section class="gesture-onboarding-sheet" role="dialog" aria-modal="true" aria-labelledby="gestureOnboardingTitle">
+    <p class="gesture-onboarding-kicker">Quick tip</p>
+    <h2 id="gestureOnboardingTitle" class="gesture-onboarding-title">Manage expenses faster</h2>
+    <p class="gesture-onboarding-copy">Use these gestures directly on any expense entry.</p>
+
+    <div class="gesture-guide">
+      <div class="gesture-guide-row">
+        <span class="gesture-guide-icon" aria-hidden="true">←</span>
+        <span>
+          <span class="gesture-guide-label">Swipe left</span>
+          <span class="gesture-guide-description">Delete an expense</span>
+        </span>
+      </div>
+
+      <div class="gesture-guide-row">
+        <span class="gesture-guide-icon" aria-hidden="true">→</span>
+        <span>
+          <span class="gesture-guide-label">Swipe right</span>
+          <span class="gesture-guide-description">Pin or unpin an expense</span>
+        </span>
+      </div>
+
+      <div class="gesture-guide-row">
+        <span class="gesture-guide-icon" aria-hidden="true">⌁</span>
+        <span>
+          <span class="gesture-guide-label">Tap the expense</span>
+          <span class="gesture-guide-description">Open it for editing</span>
+        </span>
+      </div>
+    </div>
+
+    <label class="gesture-onboarding-options">
+      <input id="gestureDontShowAgain" type="checkbox" checked>
+      <span>Don't show this again</span>
+    </label>
+
+    <button id="gestureOnboardingDone" class="gesture-onboarding-button" type="button">Got it</button>
+  </section>
+</div>
+
+<div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
+
+
+<script>
+(() => {
+  const GESTURE_ONBOARDING_KEY = "myBudgetGestureOnboardingSeen_v1";
+  const onboarding = document.getElementById("gestureOnboarding");
+  const onboardingDone = document.getElementById("gestureOnboardingDone");
+  const dontShowAgain = document.getElementById("gestureDontShowAgain");
+  const toast = document.getElementById("appToast");
+  let toastTimer;
+
+  window.showAppToast = function(message) {
+    if (!toast) return;
+    clearTimeout(toastTimer);
+    toast.textContent = message;
+    toast.classList.add("show");
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 1900);
+  };
+
+  function runGestureDemo() {
+    const firstExpense = document.querySelector("#expenseList .expense");
+    if (!firstExpense) return;
+    firstExpense.classList.remove("gesture-demo");
+    void firstExpense.offsetWidth;
+    firstExpense.classList.add("gesture-demo");
+    setTimeout(() => firstExpense.classList.remove("gesture-demo"), 1800);
+  }
+
+  function showGestureOnboarding() {
+    if (!onboarding) return;
+    onboarding.classList.add("show");
+    onboarding.setAttribute("aria-hidden", "false");
+    setTimeout(runGestureDemo, 180);
+  }
+
+  function hideGestureOnboarding() {
+    if (!onboarding) return;
+    if (dontShowAgain?.checked) {
+      localStorage.setItem(GESTURE_ONBOARDING_KEY, "1");
+    }
+    onboarding.classList.remove("show");
+    onboarding.setAttribute("aria-hidden", "true");
+  }
+
+  onboardingDone?.addEventListener("click", hideGestureOnboarding);
+
+  onboarding?.addEventListener("click", (event) => {
+    if (event.target === onboarding) hideGestureOnboarding();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && onboarding?.classList.contains("show")) {
+      hideGestureOnboarding();
+    }
+  });
+
+  window.addEventListener("load", () => {
+    if (!localStorage.getItem(GESTURE_ONBOARDING_KEY)) {
+      setTimeout(showGestureOnboarding, 450);
+    }
+  });
+
+  // Add visible tap feedback before the existing edit action runs.
+  document.getElementById("expenseList")?.addEventListener("pointerdown", (event) => {
+    const content = event.target.closest(".expense-content");
+    if (!content) return;
+    content.classList.remove("tap-feedback");
+    void content.offsetWidth;
+    content.classList.add("tap-feedback");
+    setTimeout(() => content.classList.remove("tap-feedback"), 190);
+  });
+})();
+</script>
+
 </body>
 </html>
 
