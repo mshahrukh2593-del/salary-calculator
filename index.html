@@ -9,7 +9,7 @@
 <meta content="#39a844" name="theme-color"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="apple-touch-icon.png" rel="icon" sizes="180x180" type="image/png"/>
-<title>My Budget v8.7</title>
+<title>My Budget v8.8</title>
 <style>:root {
       color-scheme: light dark;
       --bg: #f2f4f7;
@@ -1527,163 +1527,6 @@
   }
 }
 
-/* One-time gesture onboarding */
-.gesture-onboarding-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(3, 8, 18, .54);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-
-.gesture-onboarding-backdrop.show {
-  display: flex;
-}
-
-.gesture-onboarding-sheet {
-  width: min(520px, 100%);
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 26px;
-  padding: 20px;
-  background:
-    linear-gradient(160deg, rgba(255,255,255,.055), rgba(255,255,255,0) 48%),
-    #141b26;
-  box-shadow: 0 24px 70px rgba(0,0,0,.42);
-  transform: translateY(28px);
-  opacity: 0;
-  animation: gestureSheetIn .34s cubic-bezier(.2,.8,.2,1) forwards;
-}
-
-@keyframes gestureSheetIn {
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.gesture-onboarding-kicker {
-  margin: 0 0 4px;
-  color: #7db7ff;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: .03em;
-  text-transform: uppercase;
-}
-
-.gesture-onboarding-title {
-  margin: 0;
-  color: var(--text);
-  font-size: 24px;
-  line-height: 1.15;
-}
-
-.gesture-onboarding-copy {
-  margin: 8px 0 16px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.gesture-guide {
-  display: grid;
-  gap: 10px;
-}
-
-.gesture-guide-row {
-  display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 12px;
-  align-items: center;
-  min-height: 62px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,.065);
-  border-radius: 16px;
-  background: rgba(255,255,255,.025);
-}
-
-.gesture-guide-icon {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  background: rgba(79, 145, 255, .13);
-  color: #67a8ff;
-  font-size: 19px;
-  font-weight: 900;
-}
-
-.gesture-guide-label {
-  display: block;
-  color: var(--text);
-  font-weight: 800;
-}
-
-.gesture-guide-description {
-  display: block;
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.gesture-onboarding-options {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: 15px 2px 14px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.gesture-onboarding-options input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-}
-
-.gesture-onboarding-button {
-  width: 100%;
-  min-height: 52px;
-  border: 0;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #5ba2ff, #3378e8);
-  color: #fff;
-  font: inherit;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.gesture-onboarding-button:active {
-  transform: scale(.985);
-}
-
-/* First-row gesture demo */
-.expense.gesture-demo .expense-content {
-  animation: gestureRowDemo 1.35s ease-in-out .28s 1;
-}
-
-@keyframes gestureRowDemo {
-  0%, 18%, 48%, 78%, 100% { transform: translateX(0); }
-  32% { transform: translateX(22px); }
-  64% { transform: translateX(-22px); }
-}
-
-/* Tap feedback */
-.expense-content.tap-feedback {
-  animation: expenseTapFeedback .16s ease;
-}
-
-@keyframes expenseTapFeedback {
-  50% {
-    transform: scale(.988);
-    background: rgba(255,255,255,.045);
-  }
-}
-
 /* Toasts */
 .app-toast {
   position: fixed;
@@ -2332,7 +2175,7 @@ dialog::backdrop {
     font-size: 11px;
   }
 }
-</style><meta content="8.7" name="application-version"/></head>
+</style><meta content="8.8" name="application-version"/></head>
 <body>
 <main class="app">
 <header class="topbar">
@@ -3111,8 +2954,6 @@ dialog::backdrop {
       saveState();
       incomeStatus.className = "status ok";
       incomeStatus.textContent = "Saved";
-      localStorage.setItem("myBudgetGestureOnboardingSeen","true");
-    localStorage.setItem("gestureOnboardingSeen","true");
 render();
       setTimeout(() => {
         if (incomeStatus.textContent === "Saved") incomeStatus.textContent = "";
@@ -3545,111 +3386,21 @@ render();
     saveState();
     render();
   </script>
-<div aria-hidden="true" class="gesture-onboarding-backdrop" id="gestureOnboarding">
-<section aria-labelledby="gestureOnboardingTitle" aria-modal="true" class="gesture-onboarding-sheet" role="dialog">
-<p class="gesture-onboarding-kicker">Quick tip</p>
-<h2 class="gesture-onboarding-title" id="gestureOnboardingTitle">Manage expenses faster</h2>
-<p class="gesture-onboarding-copy">Use these gestures directly on any expense entry.</p>
-<div class="gesture-guide">
-<div class="gesture-guide-row">
-<span aria-hidden="true" class="gesture-guide-icon">←</span>
-<span>
-<span class="gesture-guide-label">Swipe left</span>
-<span class="gesture-guide-description">Delete an expense</span>
-</span>
-</div>
-<div class="gesture-guide-row">
-<span aria-hidden="true" class="gesture-guide-icon">→</span>
-<span>
-<span class="gesture-guide-label">Swipe right</span>
-<span class="gesture-guide-description">Pin or unpin an expense</span>
-</span>
-</div>
-<div class="gesture-guide-row">
-<span aria-hidden="true" class="gesture-guide-icon">⌁</span>
-<span>
-<span class="gesture-guide-label">Tap the expense</span>
-<span class="gesture-guide-description">Open it for editing</span>
-</span>
-</div>
-</div>
-<label class="gesture-onboarding-options">
-<input checked="" id="gestureDontShowAgain" type="checkbox"/>
-<span>Don't show this again</span>
-</label>
-<button class="gesture-onboarding-button" id="gestureOnboardingDone" type="button">Got it</button>
-</section>
-</div>
+
 <div aria-live="polite" class="app-toast" id="appToast" role="status"></div>
 <script>
-(() => {
-  const GESTURE_ONBOARDING_KEY = "myBudgetGestureOnboardingSeen_v1";
-  const onboarding = document.getElementById("gestureOnboarding");
-  const onboardingDone = document.getElementById("gestureOnboardingDone");
-  const dontShowAgain = document.getElementById("gestureDontShowAgain");
-  const toast = document.getElementById("appToast");
-  let toastTimer;
+(function () {
+  let toastTimer = null;
 
-  window.showAppToast = function(message) {
+  window.showAppToast = function (message) {
+    const toast = document.getElementById("appToast");
     if (!toast) return;
-    clearTimeout(toastTimer);
+
     toast.textContent = message;
     toast.classList.add("show");
+    clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove("show"), 1900);
   };
-
-  function runGestureDemo() {
-    const firstExpense = document.querySelector("#expenseList .expense");
-    if (!firstExpense) return;
-    firstExpense.classList.remove("gesture-demo");
-    void firstExpense.offsetWidth;
-    firstExpense.classList.add("gesture-demo");
-    setTimeout(() => firstExpense.classList.remove("gesture-demo"), 1800);
-  }
-
-  function showGestureOnboarding() {
-    if (!onboarding) return;
-    onboarding.classList.add("show");
-    onboarding.setAttribute("aria-hidden", "false");
-    setTimeout(runGestureDemo, 180);
-  }
-
-  function hideGestureOnboarding() {
-    if (!onboarding) return;
-    if (dontShowAgain?.checked) {
-      localStorage.setItem(GESTURE_ONBOARDING_KEY, "1");
-    }
-    onboarding.classList.remove("show");
-    onboarding.setAttribute("aria-hidden", "true");
-  }
-
-  onboardingDone?.addEventListener("click", hideGestureOnboarding);
-
-  onboarding?.addEventListener("click", (event) => {
-    if (event.target === onboarding) hideGestureOnboarding();
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && onboarding?.classList.contains("show")) {
-      hideGestureOnboarding();
-    }
-  });
-
-  window.addEventListener("load", () => {
-    if (!localStorage.getItem(GESTURE_ONBOARDING_KEY)) {
-      setTimeout(showGestureOnboarding, 450);
-    }
-  });
-
-  // Add visible tap feedback before the existing edit action runs.
-  document.getElementById("expenseList")?.addEventListener("pointerdown", (event) => {
-    const content = event.target.closest(".expense-content");
-    if (!content) return;
-    content.classList.remove("tap-feedback");
-    void content.offsetWidth;
-    content.classList.add("tap-feedback");
-    setTimeout(() => content.classList.remove("tap-feedback"), 190);
-  });
 })();
 </script>
 </body>
