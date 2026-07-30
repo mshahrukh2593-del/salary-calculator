@@ -634,27 +634,97 @@
     }
 
 
-    /* More compact month selector */
+
+    /* Integrated iOS-style month picker */
     .month-card {
-      padding-left: 10px;
-      padding-right: 10px;
+      padding-left: 12px;
+      padding-right: 12px;
     }
 
-    .month-card .month-row {
-      grid-template-columns: 36px minmax(0, 1fr) 36px;
-      gap: 6px;
+    .month-card > label {
+      margin-left: 2px;
+      margin-bottom: 6px;
+      text-align: left;
     }
 
-    .month-card .icon-button {
-      min-width: 36px;
-      width: 36px;
-      height: 36px;
+    .month-picker {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      align-items: stretch;
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
     }
 
-    .month-card input[type="month"] {
-      min-height: 38px;
-      padding-top: 7px;
-      padding-bottom: 7px;
+    .month-picker input[type="month"] {
+      min-width: 0;
+      width: 100%;
+      min-height: 44px;
+      padding: 0 8px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--text);
+      text-align: center;
+      font-size: 16px;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .month-picker input[type="month"]:focus {
+      border: 0;
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--primary);
+    }
+
+    .month-nav-button {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 28px;
+      font-weight: 750;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .month-nav-button:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .month-nav-button:last-child {
+      border-left: 1px solid var(--border);
+    }
+
+    .month-nav-button:active {
+      background: var(--primary-soft);
+    }
+
+    @media (max-width: 390px) {
+      .month-card {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .month-picker {
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+      }
+
+      .month-picker input[type="month"],
+      .month-nav-button {
+        min-height: 42px;
+      }
+
+      .month-nav-button {
+        min-width: 42px;
+        font-size: 26px;
+      }
     }
 
     /* Swipe actions for expense rows */
@@ -883,13 +953,11 @@
 
     <section class="card month-card no-print">
       <h2>Budget month</h2>
-      <div class="month-row">
-        <button id="previousMonthButton" class="icon-button" type="button" aria-label="Previous month">‹</button>
-        <div>
-          <label for="monthInput">Selected month</label>
-          <input id="monthInput" type="month">
-        </div>
-        <button id="nextMonthButton" class="icon-button" type="button" aria-label="Next month">›</button>
+      <label for="monthInput">Selected month</label>
+      <div class="month-picker">
+        <button id="previousMonthButton" class="month-nav-button" type="button" aria-label="Previous month">‹</button>
+        <input id="monthInput" type="month">
+        <button id="nextMonthButton" class="month-nav-button" type="button" aria-label="Next month">›</button>
       </div>
       <p class="inline-note">Every month is saved separately. Switching months does not delete anything.</p>
     </section>
