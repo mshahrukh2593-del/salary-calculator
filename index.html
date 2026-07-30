@@ -9,7 +9,7 @@
 <meta content="#39a844" name="theme-color"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="apple-touch-icon.png" rel="icon" sizes="180x180" type="image/png"/>
-<title>My Budget v8.5</title>
+<title>My Budget v8.6</title>
 <style>:root {
       color-scheme: light dark;
       --bg: #f2f4f7;
@@ -2265,7 +2265,74 @@ dialog::backdrop {
     font-size: 18px !important;
   }
 }
-</style><meta content="8.5" name="application-version"/></head>
+
+
+
+/* =========================================================
+   v8.6 — swipe removed; compact action buttons added
+   ========================================================= */
+.expense-swipe-bg {
+  display: none !important;
+}
+
+.expense {
+  touch-action: manipulation !important;
+  overflow: visible !important;
+}
+
+.expense-content {
+  transform: none !important;
+  padding-bottom: 12px !important;
+}
+
+.expense-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.expense-text-action {
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid currentColor;
+  border-radius: 9px;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.expense-text-action.pin-action {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.expense-text-action.delete-action {
+  color: var(--red);
+  background: var(--red-soft);
+}
+
+.expense-text-action:active {
+  transform: scale(.96);
+}
+
+@media (max-width: 390px) {
+  .expense-row-actions {
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .expense-text-action {
+    min-height: 28px;
+    padding: 5px 9px;
+    font-size: 11px;
+  }
+}
+</style><meta content="8.6" name="application-version"/></head>
 <body>
 <main class="app">
 <header class="topbar">
@@ -2985,11 +3052,6 @@ dialog::backdrop {
         li.dataset.id = e.id;
         li.style.setProperty("--expense-category-color", CATEGORY_COLORS[e.category || "Other"] || CATEGORY_COLORS.Other);
         li.innerHTML = `
-          <div class="expense-swipe-bg" aria-hidden="true">
-            <span class="swipe-pin">📌 ${e.pinned ? "Unpin" : "Pin"}</span>
-            <span class="swipe-delete">Delete 🗑</span>
-          </div>
-
           <div class="expense-content" role="button" tabindex="0" aria-label="Edit ${escapeHtml(e.name)}">
             <div class="expense-head">
               <div style="min-width:0">
@@ -3008,113 +3070,21 @@ dialog::backdrop {
             </div>
 
             ${e.note ? `<div class="expense-note">${escapeHtml(e.note)}</div>` : ""}
+
+            <div class="expense-row-actions">
+              <button class="expense-text-action pin-action" type="button" data-action="pin">
+                ${e.pinned ? "Unpin" : "Pin"}
+              </button>
+              <button class="expense-text-action delete-action" type="button" data-action="delete">
+                Delete
+              </button>
+            </div>
           </div>
         `;
         expenseList.appendChild(li);
-        enableExpenseSwipe(li);
       }
     }
 
-
-    function enableExpenseSwipe(li) {
-      const content = li.querySelector(".expense-content");
-      if (!content) return;
-
-      let startX = 0;
-      let startY = 0;
-      let deltaX = 0;
-      let swiping = false;
-      let horizontalGesture = false;
-
-      const resetSwipe = () => {
-        li.classList.remove("is-swiping", "swiping-left", "swiping-right");
-        content.style.transform = "";
-        deltaX = 0;
-        swiping = false;
-        horizontalGesture = false;
-      };
-
-      li.addEventListener("touchstart", (event) => {
-        if (event.touches.length !== 1 || event.target.closest("button")) return;
-
-        document.querySelectorAll(".expense").forEach((row) => {
-          if (row === li) return;
-          row.classList.remove("is-swiping", "swiping-left", "swiping-right");
-          const otherContent = row.querySelector(".expense-content");
-          if (otherContent) otherContent.style.transform = "";
-        });
-        const touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-        deltaX = 0;
-        swiping = true;
-        horizontalGesture = false;
-        li.classList.add("is-swiping");
-      }, { passive: true });
-
-      li.addEventListener("touchmove", (event) => {
-        if (!swiping || event.touches.length !== 1) return;
-
-        const touch = event.touches[0];
-        const moveX = touch.clientX - startX;
-        const moveY = touch.clientY - startY;
-
-        if (!horizontalGesture) {
-          if (Math.abs(moveY) > Math.abs(moveX) && Math.abs(moveY) > 8) {
-            resetSwipe();
-            return;
-          }
-          if (Math.abs(moveX) > 8) horizontalGesture = true;
-        }
-
-        if (!horizontalGesture) return;
-
-        event.preventDefault();
-        deltaX = Math.max(-110, Math.min(110, moveX));
-        content.style.transform = `translateX(${deltaX}px)`;
-        li.classList.toggle("swiping-right", deltaX > 0);
-        li.classList.toggle("swiping-left", deltaX < 0);
-      }, { passive: false });
-
-      const finishSwipe = () => {
-        if (!swiping) return;
-
-        const id = li.dataset.id;
-        const threshold = 72;
-        const wasHorizontalGesture = horizontalGesture;
-        const finalDeltaX = deltaX;
-
-        if (wasHorizontalGesture) {
-          li.dataset.suppressClick = "1";
-          setTimeout(() => delete li.dataset.suppressClick, 350);
-        }
-
-        // Always close the row first, even when the finger finishes outside
-        // the row. This is the important iOS Safari fix.
-        resetSwipe();
-
-        if (wasHorizontalGesture && finalDeltaX >= threshold) {
-          requestAnimationFrame(() => togglePin(id));
-          return;
-        }
-
-        if (wasHorizontalGesture && finalDeltaX <= -threshold) {
-          requestAnimationFrame(() => {
-            setTimeout(() => deleteExpense(id), 0);
-          });
-        }
-      };
-
-      // Listen on the document as well as the row because iOS may dispatch
-      // touchend outside the original element after a horizontal swipe.
-      li.addEventListener("touchend", finishSwipe);
-      li.addEventListener("touchcancel", resetSwipe);
-      document.addEventListener("touchend", finishSwipe, { passive: true });
-      document.addEventListener("touchcancel", resetSwipe, { passive: true });
-
-      // Extra safety: clear a stranded swipe when the browser loses focus.
-      window.addEventListener("blur", resetSwipe);
-    }
 
     function scheduleIncomeSave() {
       clearTimeout(incomeSaveTimer);
@@ -3495,16 +3465,35 @@ dialog::backdrop {
 
     expenseList.addEventListener("click", (event) => {
       const expense = event.target.closest(".expense");
+      if (!expense) return;
+
+      const actionButton = event.target.closest("[data-action]");
+      if (actionButton) {
+        event.stopPropagation();
+
+        if (actionButton.dataset.action === "pin") {
+          togglePin(expense.dataset.id);
+          return;
+        }
+
+        if (actionButton.dataset.action === "delete") {
+          deleteExpense(expense.dataset.id);
+          return;
+        }
+      }
+
       const content = event.target.closest(".expense-content");
-      if (!expense || !content || expense.dataset.suppressClick === "1") return;
-      openEditExpense(expense.dataset.id);
+      if (content) openEditExpense(expense.dataset.id);
     });
 
     expenseList.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
+      if (event.target.closest("[data-action]")) return;
+
       const content = event.target.closest(".expense-content");
       const expense = event.target.closest(".expense");
       if (!content || !expense) return;
+
       event.preventDefault();
       openEditExpense(expense.dataset.id);
     });
