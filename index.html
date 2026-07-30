@@ -635,6 +635,254 @@
 
 
 
+
+
+    /* Spending by category */
+    .category-section {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .category-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .category-section-head h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .category-section-head span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .category-chart-layout {
+      display: grid;
+      grid-template-columns: 138px minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+    }
+
+    .category-ring {
+      position: relative;
+      width: 138px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .category-ring::before {
+      content: "";
+      position: absolute;
+      inset: 24px;
+      border-radius: 50%;
+      background: var(--card);
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+
+    .category-ring-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      z-index: 1;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .category-ring-center strong {
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .category-ring-center span {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .category-legend {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .category-legend-item {
+      display: grid;
+      grid-template-columns: 10px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      font-size: 11px;
+    }
+
+    .category-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .category-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .category-share {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .badge.category {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    @media (max-width: 390px) {
+      .category-chart-layout {
+        grid-template-columns: 118px minmax(0, 1fr);
+        gap: 11px;
+      }
+
+      .category-ring {
+        width: 118px;
+      }
+
+      .category-ring::before {
+        inset: 21px;
+      }
+
+      .category-ring-center strong {
+        font-size: 16px;
+      }
+    }
+
+
+    /* Refined category chart typography and category-colored expense rows */
+    .category-ring::before {
+      inset: 29px;
+    }
+
+    .category-ring-center {
+      padding: 0 14px;
+    }
+
+    .category-ring-center strong {
+      display: block;
+      max-width: 88px;
+      margin: 0 auto;
+      font-size: clamp(13px, 3.4vw, 17px);
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .category-ring-center span {
+      font-size: 9px;
+    }
+
+    .category-share {
+      font-weight: 850;
+    }
+
+    .expense-content {
+      border-left: 4px solid var(--expense-category-color, var(--border));
+      padding-left: 10px;
+      border-radius: 0 12px 12px 0;
+    }
+
+    .badge.category {
+      border: 1px solid color-mix(in srgb, var(--expense-category-color, var(--green)) 45%, transparent);
+      background: color-mix(in srgb, var(--expense-category-color, var(--green)) 14%, transparent);
+      color: var(--expense-category-color, var(--green));
+    }
+
+    @supports not (color: color-mix(in srgb, red 50%, blue)) {
+      .badge.category {
+        background: var(--surface);
+        color: var(--expense-category-color, var(--green));
+      }
+    }
+
+    @media (max-width: 390px) {
+      .category-ring::before {
+        inset: 25px;
+      }
+
+      .category-ring-center {
+        padding: 0 11px;
+      }
+
+      .category-ring-center strong {
+        max-width: 72px;
+        font-size: clamp(12px, 3.2vw, 15px);
+      }
+
+      .expense-content {
+        padding-left: 8px;
+      }
+    }
+
+    /* Cleaner dashboard hierarchy */
+    .compact-dashboard-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .compact-dashboard-grid .metric {
+      min-height: 92px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .compact-dashboard-grid .metric-label {
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .compact-dashboard-grid .metric-value {
+      font-size: 22px;
+    }
+
+    .metric.metric-days {
+      background: var(--cyan-soft);
+      border-color: transparent;
+    }
+
+    .compact-allowance {
+      padding: 10px 12px;
+    }
+
+    .compact-allowance .daily-allowance-value {
+      font-size: 22px;
+    }
+
+    .dashboard-hero {
+      gap: 10px;
+    }
+
+    .metric-icon,
+    .dashboard-secondary {
+      display: none !important;
+    }
+
+    @media (max-width: 390px) {
+      .compact-dashboard-grid .metric {
+        min-height: 84px;
+        padding: 10px;
+      }
+
+      .compact-dashboard-grid .metric-value {
+        font-size: 20px;
+      }
+    }
+
     /* Integrated iOS-style month picker */
     .month-card {
       padding-left: 12px;
@@ -963,61 +1211,71 @@
     </section>
 
 
+
     <section class="card">
       <h2>Dashboard — <span id="monthTitle"></span></h2>
 
       <div class="dashboard-hero">
         <div id="budgetRing" class="budget-ring" role="img" aria-label="Remaining budget">
           <div class="budget-ring-content">
-            <span id="ringRemainingDisplay" class="ring-value">€0.00</span>
             <span class="ring-label">Remaining</span>
+            <span id="ringRemainingDisplay" class="ring-value">€0.00</span>
             <span id="ringPercentDisplay" class="ring-percent">0% left</span>
           </div>
         </div>
 
-        <div class="daily-allowance">
-          <span class="daily-allowance-label">Safe to spend today</span>
+        <div class="daily-allowance compact-allowance">
+          <span class="daily-allowance-label">Safe to spend per day</span>
           <span id="dailyAllowanceDisplay" class="daily-allowance-value">€0.00</span>
           <span id="dailyAllowanceNote" class="daily-allowance-note">Based on the remaining days in this month</span>
         </div>
       </div>
 
-      <div class="summary" style="margin-top:12px">
+      <div class="summary compact-dashboard-grid" style="margin-top:12px">
         <div class="metric metric-income">
-          <span class="metric-icon" aria-hidden="true">💶</span>
-          <span class="metric-label">Total income</span>
+          <span class="metric-label">Income</span>
           <span id="totalIncomeDisplay" class="metric-value">€0.00</span>
         </div>
+
         <div class="metric metric-spent">
-          <span class="metric-icon" aria-hidden="true">💳</span>
-          <span class="metric-label">Total spent</span>
+          <span class="metric-label">Spent</span>
           <span id="totalSpentDisplay" class="metric-value">€0.00</span>
         </div>
-        <div class="metric metric-remaining">
-          <span class="metric-icon" aria-hidden="true">💰</span>
-          <span class="metric-label">Remaining</span>
-          <span id="remainingDisplay" class="metric-value positive">€0.00</span>
-        </div>
+
         <div class="metric metric-count">
-          <span class="metric-icon" aria-hidden="true">🧾</span>
           <span class="metric-label">Expenses</span>
           <span id="expenseCountDisplay" class="metric-value">0</span>
         </div>
+
+        <div class="metric metric-days">
+          <span class="metric-label">Days left</span>
+          <span id="daysLeftDisplay" class="metric-value">0</span>
+        </div>
       </div>
 
-      <div class="grid-2 dashboard-secondary">
-        <div class="metric metric-biggest">
-          <span class="metric-icon" aria-hidden="true">📌</span>
-          <span class="metric-label">Biggest expense</span>
-          <span id="biggestExpenseDisplay" class="metric-value">—</span>
+
+      <div class="category-section">
+        <div class="category-section-head">
+          <h3>Spending by category</h3>
+          <span id="categoryChartSubtitle">No expenses yet</span>
         </div>
-        <div class="metric metric-average">
-          <span class="metric-icon" aria-hidden="true">📊</span>
-          <span class="metric-label">Average expense</span>
-          <span id="averageExpenseDisplay" class="metric-value">€0.00</span>
+
+        <div class="category-chart-layout">
+          <div id="categoryRing" class="category-ring" role="img" aria-label="Spending by category">
+            <div class="category-ring-center">
+              <strong id="categoryRingTotal">€0.00</strong>
+              <span>spent</span>
+            </div>
+          </div>
+          <div id="categoryLegend" class="category-legend"></div>
         </div>
       </div>
+
+      <span id="remainingDisplay" class="hidden">€0.00</span>
+      <span id="biggestExpenseDisplay" class="hidden">—</span>
+      <span id="averageExpenseDisplay" class="hidden">€0.00</span>
     </section>
+
 
 
     <section class="card no-print">
@@ -1093,6 +1351,21 @@
         </div>
       </div>
 
+      <label for="expenseCategoryInput">Category</label>
+      <select id="expenseCategoryInput">
+        <option value="Housing">Housing</option>
+        <option value="Bills">Bills</option>
+        <option value="Groceries">Groceries</option>
+        <option value="Transport">Transport</option>
+        <option value="Dining">Dining</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Health">Health</option>
+        <option value="Travel">Travel</option>
+        <option value="Education">Education</option>
+        <option value="Other">Other</option>
+      </select>
+
       <label for="expenseNoteInput">Notes (optional)</label>
       <textarea id="expenseNoteInput" maxlength="500" placeholder="For example, Includes electricity"></textarea>
 
@@ -1149,6 +1422,25 @@
     const LEGACY_ADDITIONAL_KEY = "budgetAppAdditionalIncome";
     const LEGACY_EXPENSES_KEY = "budgetAppExpenses";
 
+    const EXPENSE_CATEGORIES = [
+      "Housing", "Bills", "Groceries", "Transport", "Dining",
+      "Entertainment", "Shopping", "Health", "Travel", "Education", "Other"
+    ];
+
+    const CATEGORY_COLORS = {
+      Housing: "#3b82f6",
+      Bills: "#8b5cf6",
+      Groceries: "#22c55e",
+      Transport: "#f59e0b",
+      Dining: "#ef4444",
+      Entertainment: "#ec4899",
+      Shopping: "#14b8a6",
+      Health: "#06b6d4",
+      Travel: "#6366f1",
+      Education: "#84cc16",
+      Other: "#94a3b8"
+    };
+
     let state = loadState();
     let selectedMonth = currentMonthKey();
     let editingExpenseId = null;
@@ -1172,6 +1464,7 @@
     const expenseNameInput = $("expenseNameInput");
     const expenseAmountInput = $("expenseAmountInput");
     const expenseDateInput = $("expenseDateInput");
+    const expenseCategoryInput = $("expenseCategoryInput");
     const expenseNoteInput = $("expenseNoteInput");
     const expenseRecurringInput = $("expenseRecurringInput");
     const expensePinnedInput = $("expensePinnedInput");
@@ -1208,6 +1501,7 @@
                 amount: finiteNonNegative(e.amount),
                 date: validDate(e.date) ? String(e.date).slice(0, 10) : `${monthKey}-01`,
                 note: String(e.note || ""),
+                category: EXPENSE_CATEGORIES.includes(String(e.category)) ? String(e.category) : "Other",
                 recurring: Boolean(e.recurring),
                 pinned: Boolean(e.pinned),
                 createdAt: String(e.createdAt || new Date().toISOString())
@@ -1248,6 +1542,7 @@
               amount: finiteNonNegative(e.amount),
               date: validDate(e.date) ? String(e.date).slice(0, 10) : `${currentMonthKey()}-01`,
               note: "",
+              category: "Other",
               recurring: false,
               pinned: Boolean(e.pinned),
               createdAt: new Date().toISOString()
@@ -1406,6 +1701,63 @@
       return Math.max(lastDay - today.getDate() + 1, 1);
     }
 
+
+    function renderCategoryChart(month) {
+      const categoryTotals = {};
+      for (const category of EXPENSE_CATEGORIES) categoryTotals[category] = 0;
+
+      for (const expense of month.expenses) {
+        const category = EXPENSE_CATEGORIES.includes(expense.category) ? expense.category : "Other";
+        categoryTotals[category] += expense.amount;
+      }
+
+      const active = Object.entries(categoryTotals)
+        .filter(([, amount]) => amount > 0)
+        .sort((a, b) => b[1] - a[1]);
+
+      const total = active.reduce((sum, [, amount]) => sum + amount, 0);
+      const ring = $("categoryRing");
+      const legend = $("categoryLegend");
+
+      $("categoryRingTotal").textContent = formatMoney(total);
+      $("categoryChartSubtitle").textContent = active.length
+        ? `${active.length} categor${active.length === 1 ? "y" : "ies"}`
+        : "No expenses yet";
+
+      if (!active.length || total <= 0) {
+        ring.style.background = "var(--border)";
+        ring.setAttribute("aria-label", "No category spending data");
+        legend.innerHTML = '<div class="inline-note" style="margin:0">Add categorized expenses to see the breakdown.</div>';
+        return;
+      }
+
+      let current = 0;
+      const segments = [];
+      for (const [category, amount] of active) {
+        const start = current;
+        const share = (amount / total) * 100;
+        current += share;
+        segments.push(`${CATEGORY_COLORS[category]} ${start.toFixed(2)}% ${current.toFixed(2)}%`);
+      }
+
+      ring.style.background = `conic-gradient(${segments.join(", ")})`;
+      ring.setAttribute(
+        "aria-label",
+        active.map(([category, amount]) => `${category} ${Math.round((amount / total) * 100)} percent`).join(", ")
+      );
+
+      legend.innerHTML = active.slice(0, 6).map(([category, amount]) => {
+        const share = (amount / total) * 100;
+        return `
+          <div class="category-legend-item">
+            <span class="category-dot" style="background:${CATEGORY_COLORS[category]}"></span>
+            <span class="category-name">${escapeHtml(category)}</span>
+            <span class="category-share" style="color:${CATEGORY_COLORS[category]}">${Math.round(share)}%</span>
+          </div>
+        `;
+      }).join("");
+    }
+
     function render() {
       const month = monthData();
       const t = totals(month);
@@ -1425,6 +1777,7 @@
         ? `${t.biggest.name} · ${formatMoney(t.biggest.amount)}`
         : "—";
       $("averageExpenseDisplay").textContent = formatMoney(t.average);
+      renderCategoryChart(month);
 
       const spentPercent = t.totalIncome > 0
         ? (t.totalSpent / t.totalIncome) * 100
@@ -1465,6 +1818,7 @@
 
       const daysRemaining = daysRemainingInSelectedMonth();
       const dailyAllowance = t.remaining > 0 ? t.remaining / daysRemaining : 0;
+      $("daysLeftDisplay").textContent = String(daysRemaining);
       $("dailyAllowanceDisplay").textContent = formatMoney(dailyAllowance);
       $("dailyAllowanceDisplay").classList.toggle("negative", t.remaining < 0);
       $("dailyAllowanceNote").textContent = selectedMonth === currentMonthKey()
@@ -1479,7 +1833,8 @@
       const query = searchInput.value.trim().toLocaleLowerCase(LOCALE);
       let entries = month.expenses.filter((e) =>
         e.name.toLocaleLowerCase(LOCALE).includes(query) ||
-        e.note.toLocaleLowerCase(LOCALE).includes(query)
+        e.note.toLocaleLowerCase(LOCALE).includes(query) ||
+        String(e.category || "Other").toLocaleLowerCase(LOCALE).includes(query)
       );
 
       const sort = sortSelect.value;
@@ -1508,6 +1863,7 @@
         const li = document.createElement("li");
         li.className = "expense";
         li.dataset.id = e.id;
+        li.style.setProperty("--expense-category-color", CATEGORY_COLORS[e.category || "Other"] || CATEGORY_COLORS.Other);
         li.innerHTML = `
           <div class="expense-swipe-bg" aria-hidden="true">
             <span class="swipe-pin">📌 ${e.pinned ? "Unpin" : "Pin"}</span>
@@ -1525,6 +1881,7 @@
             <div class="expense-meta-row">
               <div class="badges">
                 <span class="badge date-badge">${escapeHtml(formatDate(e.date))}</span>
+                <span class="badge category">${escapeHtml(e.category || "Other")}</span>
                 ${e.pinned ? '<span class="badge pin icon-badge" aria-label="Pinned" title="Pinned">📌</span>' : ""}
                 ${e.recurring ? '<span class="badge recurring icon-badge" aria-label="Recurring" title="Recurring">↻</span>' : ""}
               </div>
@@ -1662,6 +2019,7 @@
       expenseNameInput.value = "";
       expenseAmountInput.value = "";
       expenseDateInput.value = defaultDateForMonth();
+      expenseCategoryInput.value = "Other";
       expenseNoteInput.value = "";
       expenseRecurringInput.checked = false;
       expensePinnedInput.checked = false;
@@ -1680,6 +2038,7 @@
       expenseNameInput.value = expense.name;
       expenseAmountInput.value = formatInputMoney(expense.amount);
       expenseDateInput.value = expense.date;
+      expenseCategoryInput.value = expense.category || "Other";
       expenseNoteInput.value = expense.note;
       expenseRecurringInput.checked = expense.recurring;
       expensePinnedInput.checked = expense.pinned;
@@ -1698,6 +2057,7 @@
       const name = expenseNameInput.value.trim();
       const amount = parseMoneyInput(expenseAmountInput.value);
       const date = expenseDateInput.value;
+      const category = EXPENSE_CATEGORIES.includes(expenseCategoryInput.value) ? expenseCategoryInput.value : "Other";
       const note = expenseNoteInput.value.trim();
 
       if (!name) {
@@ -1723,6 +2083,7 @@
         expense.name = name;
         expense.amount = amount;
         expense.date = date;
+        expense.category = category;
         expense.note = note;
         expense.recurring = expenseRecurringInput.checked;
         expense.pinned = expensePinnedInput.checked;
@@ -1732,6 +2093,7 @@
           name,
           amount,
           date,
+          category,
           note,
           recurring: expenseRecurringInput.checked,
           pinned: expensePinnedInput.checked,
@@ -1807,6 +2169,7 @@
           name: e.name,
           amount: e.amount,
           date: `${selectedMonth}-${String(Math.min(Number(e.date.slice(8, 10)) || 1, 28)).padStart(2, "0")}`,
+          category: e.category || "Other",
           note: e.note,
           recurring: true,
           pinned: e.pinned,
@@ -1844,7 +2207,7 @@
         ["Total Spent", t.totalSpent.toFixed(2)],
         ["Remaining", t.remaining.toFixed(2)],
         [],
-        ["Pinned", "Recurring", "Date", "Description", "Notes", "Amount"]
+        ["Pinned", "Recurring", "Date", "Category", "Description", "Notes", "Amount"]
       ];
 
       [...month.expenses]
@@ -1853,6 +2216,7 @@
           e.pinned ? "Yes" : "No",
           e.recurring ? "Yes" : "No",
           e.date,
+          e.category || "Other",
           e.name,
           e.note,
           e.amount.toFixed(2)
