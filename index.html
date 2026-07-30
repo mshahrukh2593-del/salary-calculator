@@ -828,6 +828,185 @@
       }
     }
 
+
+    /* Premium dashboard cards */
+    .compact-dashboard-grid {
+      gap: 10px;
+    }
+
+    .compact-dashboard-grid .metric {
+      position: relative;
+      overflow: hidden;
+      min-height: 116px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 22px;
+      box-shadow:
+        0 10px 26px rgba(0,0,0,.14),
+        inset 0 1px 0 rgba(255,255,255,.06);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .compact-dashboard-grid .metric::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        145deg,
+        rgba(255,255,255,.08),
+        rgba(255,255,255,0) 44%
+      );
+    }
+
+    .compact-dashboard-grid .metric:active {
+      transform: scale(.985);
+      box-shadow:
+        0 6px 18px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .metric-card-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 11px;
+      background: rgba(255,255,255,.10);
+      color: currentColor;
+    }
+
+    .metric-card-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .compact-dashboard-grid .metric-label {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: rgba(255,255,255,.66);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: .01em;
+    }
+
+    .compact-dashboard-grid .metric-value {
+      position: relative;
+      z-index: 1;
+      margin-top: 2px;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,.22);
+      font-size: clamp(22px, 4.9vw, 29px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -.025em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-support {
+      position: relative;
+      z-index: 1;
+      display: block;
+      margin-top: 8px;
+      color: rgba(255,255,255,.46);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .metric.metric-income {
+      background:
+        linear-gradient(155deg, rgba(52, 112, 165, .34), rgba(33, 64, 98, .72)),
+        var(--card);
+    }
+
+    .metric.metric-spent {
+      background:
+        linear-gradient(155deg, rgba(139, 70, 89, .32), rgba(78, 45, 56, .74)),
+        var(--card);
+    }
+
+    .metric.metric-count {
+      background:
+        linear-gradient(155deg, rgba(95, 76, 140, .34), rgba(56, 47, 88, .75)),
+        var(--card);
+    }
+
+    .metric.metric-days {
+      background:
+        linear-gradient(155deg, rgba(25, 116, 132, .34), rgba(25, 72, 84, .76)),
+        var(--card);
+    }
+
+    .metric-income .metric-card-icon { color: #8fc8ff; }
+    .metric-spent .metric-card-icon { color: #ff9eb4; }
+    .metric-count .metric-card-icon { color: #c8b5ff; }
+    .metric-days .metric-card-icon { color: #84e2ed; }
+
+    @media (prefers-color-scheme: light) {
+      .compact-dashboard-grid .metric {
+        border-color: rgba(15,23,42,.06);
+        box-shadow:
+          0 10px 24px rgba(15,23,42,.08),
+          inset 0 1px 0 rgba(255,255,255,.55);
+      }
+
+      .compact-dashboard-grid .metric-label {
+        color: rgba(255,255,255,.78);
+      }
+
+      .compact-dashboard-grid .metric-value {
+        color: white;
+      }
+
+      .metric-support {
+        color: rgba(255,255,255,.62);
+      }
+    }
+
+    @media (max-width: 390px) {
+      .compact-dashboard-grid .metric {
+        min-height: 108px;
+        padding: 12px;
+        border-radius: 20px;
+      }
+
+      .metric-card-head {
+        margin-bottom: 11px;
+      }
+
+      .metric-card-icon {
+        width: 29px;
+        height: 29px;
+        border-radius: 10px;
+      }
+
+      .metric-card-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .compact-dashboard-grid .metric-value {
+        font-size: clamp(20px, 6vw, 25px);
+      }
+    }
+
     /* Cleaner dashboard hierarchy */
     .compact-dashboard-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1233,23 +1412,68 @@
 
       <div class="summary compact-dashboard-grid" style="margin-top:12px">
         <div class="metric metric-income">
-          <span class="metric-label">Income</span>
+          <div class="metric-card-head">
+            <span class="metric-label">Income</span>
+            <span class="metric-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 7.5h16v10H4z"></path>
+                <path d="M7 7.5V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.5"></path>
+                <path d="M4 11h16"></path>
+                <path d="M16 14h1"></path>
+              </svg>
+            </span>
+          </div>
           <span id="totalIncomeDisplay" class="metric-value">€0.00</span>
+          <span class="metric-support">Salary and additional income</span>
         </div>
 
         <div class="metric metric-spent">
-          <span class="metric-label">Spent</span>
+          <div class="metric-card-head">
+            <span class="metric-label">Spent</span>
+            <span class="metric-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="3.5" y="5" width="17" height="14" rx="2"></rect>
+                <path d="M3.5 9h17"></path>
+                <path d="M7 15h4"></path>
+              </svg>
+            </span>
+          </div>
           <span id="totalSpentDisplay" class="metric-value">€0.00</span>
+          <span class="metric-support">Total for the selected month</span>
         </div>
 
         <div class="metric metric-count">
-          <span class="metric-label">Expenses</span>
+          <div class="metric-card-head">
+            <span class="metric-label">Expenses</span>
+            <span class="metric-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M7 3.5h10v17l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4z"></path>
+                <path d="M9.5 8h5"></path>
+                <path d="M9.5 12h5"></path>
+                <path d="M9.5 16h3"></path>
+              </svg>
+            </span>
+          </div>
           <span id="expenseCountDisplay" class="metric-value">0</span>
+          <span class="metric-support">Recorded transactions</span>
         </div>
 
         <div class="metric metric-days">
-          <span class="metric-label">Days left</span>
+          <div class="metric-card-head">
+            <span class="metric-label">Days left</span>
+            <span class="metric-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="3.5" y="5.5" width="17" height="15" rx="2"></rect>
+                <path d="M8 3.5v4"></path>
+                <path d="M16 3.5v4"></path>
+                <path d="M3.5 10h17"></path>
+                <path d="M8 14h2"></path>
+                <path d="M14 14h2"></path>
+              </svg>
+            </span>
+          </div>
           <span id="daysLeftDisplay" class="metric-value">0</span>
+          <span class="metric-support">Including today</span>
         </div>
       </div>
 
@@ -2381,3 +2605,20 @@
   </script>
 </body>
 </html>
+
+<style>
+.metric-income .metric-value{color:#d7ecff!important;}
+.metric-spent .metric-value{color:#ffd9e3!important;}
+.metric-count .metric-value{color:#e5d8ff!important;}
+.metric-days .metric-value{color:#c8f7ff!important;}
+
+/* More breathing room between category border and expense content */
+.expense-content{
+    padding-left:16px !important;
+}
+@media (max-width:390px){
+    .expense-content{
+        padding-left:14px !important;
+    }
+}
+</style>
